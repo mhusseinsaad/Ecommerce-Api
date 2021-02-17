@@ -15,5 +15,5 @@ Route::apiresource('/products', 'ProductController');
 // Route for Reviews
 
 Route::group(['prefix' => 'products'], function () {
-    Route::apiresource('/{products/reviews}', 'ReviewController');
+    Route::apiresource('/{products}/reviews', 'ReviewController');
 });
