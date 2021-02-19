@@ -50,48 +50,32 @@ class ProductController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function show(Product $product)
     {
         return new ProductResource($product);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Product $product)
     {
-        //
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Product $product)
     {
-        //
+        $product->update([
+            'name' => $request->name,
+            'detail' => $request->description,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'discount' => $request->discount,
+        ]);
+        return response([
+            'data' => new ProductResource($product)
+        ], 201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return response(null, 204);
     }
 }
