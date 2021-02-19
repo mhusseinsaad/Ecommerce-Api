@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
-    public function index(Product $product, $id)
+    public function index(Product $product)
     {
-        $product=  $product->find($id);
+        // product $product route binding
         return ReviewResource::collection($product->reviews);
     }
 
