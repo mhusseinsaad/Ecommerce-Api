@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductCollection;
-
+use App\Exceptions\ProductNotBelongsToUser;
+use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
     public function __construct()
@@ -61,21 +62,33 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $product->update([
-            'name' => $request->name,
-            'detail' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'discount' => $request->discount,
-        ]);
-        return response([
-            'data' => new ProductResource($product)
-        ], 201);
+        if (Auth::id() !== $product->user_id) {
+            return response()->json([
+                "msg" => "Product Not Belongs To This User"
+            ]);
+        } else {
+            $product->update([
+                'name' => $request->name,
+                'detail' => $request->description,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'discount' => $request->discount,
+            ]);
+            return response([
+                'data' => new ProductResource($product)
+            ], 201);
+        }
     }
 
     public function destroy(Product $product)
     {
-        $product->delete();
-        return response(null, 204);
+        if (Auth::id() !== $product->user_id) {
+            return response()->json([
+                "msg" => "Product Not Belongs To This User"
+            ]);
+        } else {
+            $product->delete();
+            return response(null, 204);
+        }
     }
 }
